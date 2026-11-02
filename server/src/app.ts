@@ -13,7 +13,8 @@ app.use(routes);
 app.use((_request, response) => response.status(404).json({ error: 'NOT_FOUND', message: 'المسار غير موجود.' }));
 app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
   console.error(error);
-  response.status(500).json({ error: 'INTERNAL_ERROR', message: 'حدث خطأ غير متوقع.' });
+  const message = error instanceof Error ? error.message : 'حدث خطأ غير متوقع.';
+  response.status(500).json({ error: 'INTERNAL_ERROR', message });
 });
 
 export default app;
