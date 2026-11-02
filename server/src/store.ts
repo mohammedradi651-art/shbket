@@ -119,4 +119,44 @@ export function seedInitialData(networkId: string) {
   });
 }
 
+// Pre-seed default network owner 770326828 and WanasahNet
+const defaultOwnerId = 'usr_wanasah_owner';
+const defaultNetworkId = 'net_wanasah_default';
+
+const defaultOwner: StoredUser = {
+  id: defaultOwnerId,
+  name: 'محمد راضي (مالك شبكة وناسة نت)',
+  phone: '770326828',
+  role: 'network_owner',
+  networkId: defaultNetworkId,
+  networkName: 'شبكة وناسة نت',
+  password: ''
+};
+
+const defaultNetwork: Network = {
+  id: defaultNetworkId,
+  ownerId: defaultOwnerId,
+  name: 'شبكة وناسة نت',
+  slug: 'wanasah-net',
+  region: 'حضرموت',
+  status: 'active',
+  createdAt: '2026-01-01T00:00:00.000Z'
+};
+
+const defaultMikrotik: MikroTikDevice = {
+  id: 'mtk_wanasah_default',
+  networkId: defaultNetworkId,
+  name: 'مايكروتك وناسة نت الرئيسي',
+  host: '192.168.88.1',
+  port: 8728,
+  connectionType: 'routeros_api',
+  status: 'online',
+  createdAt: '2026-01-01T00:00:00.000Z'
+};
+
+users.set(defaultOwnerId, defaultOwner);
+networks.set(defaultNetworkId, defaultNetwork);
+mikrotiks.set('mtk_wanasah_default', defaultMikrotik);
+seedInitialData(defaultNetworkId);
+
 export const store = { users, networks, mikrotiks, packages, vouchers, customers, resellers, transactions };

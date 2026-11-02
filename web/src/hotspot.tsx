@@ -4,7 +4,10 @@ import ReactDOM from 'react-dom/client';
 import './hotspot.css';
 
 type NetworkConfig = { id: string; name: string; region: string; slug: string; status: 'active' | 'suspended' };
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/api';
+const API_URL = import.meta.env.VITE_API_URL 
+  || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' 
+      ? '/api' 
+      : 'http://localhost:4000/api');
 
 async function loadNetwork(identifier: string) {
   const response = await fetch(`${API_URL}/hotspot/config?network=${encodeURIComponent(identifier)}`);

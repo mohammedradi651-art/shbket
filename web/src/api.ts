@@ -1,6 +1,9 @@
 import type { ApiResponse, AuthResponse, Customer, MikroTikDevice, Network, Package, Reseller, SessionUser, Transaction, Voucher } from '../../shared/types';
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/api';
+const API_URL = import.meta.env.VITE_API_URL 
+  || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' 
+      ? '/api' 
+      : 'http://localhost:4000/api');
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
   const token = localStorage.getItem('waselnet_token');
