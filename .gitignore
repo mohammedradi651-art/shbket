@@ -1,0 +1,11 @@
+node_modules/
+dist/
+web/dist/
+server/dist/
+.env
+.env.local
+*.log
+server/firebase-service-account.json
+firebase-service-account.json
+.DS_Store
+Thumbs.db

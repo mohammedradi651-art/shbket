@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isSuperAdmin() { return signedIn() && request.auth.token.role == 'super_admin'; }
+    function sameNetwork(networkId) {
+      return signedIn() && (isSuperAdmin() || request.auth.token.networkId == networkId);
+    }
+    function ownerOrAdmin(networkId) {
+      return sameNetwork(networkId) && (isSuperAdmin() || request.auth.token.role == 'network_owner');
+    }
+
+    match /networks/{networkId} {
+      allow read: if sameNetwork(networkId);
+      allow create: if signedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow update: if ownerOrAdmin(networkId);
+      allow delete: if false;
+    }
+
+    match /customers/{customerId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow create: if sameNetwork(request.resource.data.networkId);
+      allow update: if ownerOrAdmin(resource.data.networkId);
+      allow delete: if false;
+    }
+
+    match /packages/{packageId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow write: if ownerOrAdmin(resource.data.networkId);
+    }
+
+    match /subscriptions/{subscriptionId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow write: if ownerOrAdmin(resource.data.networkId);
+    }
+
+    match /resellers/{resellerId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow write: if ownerOrAdmin(resource.data.networkId);
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow create: if sameNetwork(request.resource.data.networkId)
+        && request.auth.token.role in ['super_admin', 'network_owner', 'reseller'];
+      allow update, delete: if false;
+    }
+
+    match /mikrotiks/{mikrotikId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow write: if ownerOrAdmin(resource.data.networkId);
+    }
+
+    match /auditLogs/{logId} {
+      allow read: if sameNetwork(resource.data.networkId);
+      allow create: if sameNetwork(request.resource.data.networkId);
+      allow update, delete: if false;
+    }
+  }
+}

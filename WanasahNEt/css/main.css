@@ -1,0 +1,1005 @@
+:root {
+    --primary-bg: #0a0e17;
+    --secondary-bg: #101624;
+    --card-bg: #151c2e;
+    --card-hover: #1a243c;
+    --accent: #00e1ff;
+    --accent-dark: #00b4cc;
+    --accent-glow: rgba(0, 225, 255, 0.5);
+    --live-color: #ff2d55;
+    --soon-color: #34c759;
+    --text-primary: #ffffff;
+    --text-secondary: #8a8fa3;
+    --border: #1e2747;
+    --gradient-1: linear-gradient(135deg, #0a0e17 0%, #101624 100%);
+    --gradient-2: linear-gradient(135deg, #151c2e 0%, #1e2747 100%);
+    --shadow-1: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--primary-bg);
+    color: var(--text-primary);
+    direction: rtl;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* LOADING SCREEN */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loading-logo {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.loading-icon {
+    font-size: 60px;
+    color: var(--accent);
+    animation: pulse 2s infinite;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loading-spinner {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 3px solid transparent;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-spinner:before,
+.loading-spinner:after {
+    content: '';
+    position: absolute;
+    border: 3px solid transparent;
+    border-radius: 50%;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loading-spinner:before {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-top-color: var(--accent-dark);
+    animation: spin 3s linear infinite;
+}
+
+.loading-spinner:after {
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-top-color: var(--accent);
+    animation: spin 1.5s linear infinite;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loading-text {
+    color: var(--text-primary);
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.loading-bar {
+    width: 200px;
+    height: 4px;
+    background: var(--secondary-bg);
+    border-radius: 10px;
+    margin-top: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loading-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: width 0.4s ease;
+}
+
+/* HEADER */
+header {
+    background: var(--secondary-bg);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-1);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.site-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.logo-icon {
+    font-size: 24px;
+    color: var(--accent);
+    position: relative;
+}
+
+.logo-icon:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 225, 255, 0.1);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.logo-text span {
+    color: var(--accent);
+}
+
+.nav-toggle {
+    display: none;
+    font-size: 24px;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 5px;
+}
+
+nav li {
+    position: relative;
+}
+
+nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: var(--transition);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+nav a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--accent);
+}
+
+nav a.active {
+    background: rgba(0, 225, 255, 0.1);
+    color: var(--accent);
+}
+
+nav a.active:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 10px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+nav i {
+    font-size: 16px;
+}
+
+.search-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+/* MAIN CONTENT */
+main {
+    padding: 30px 0;
+    min-height: calc(100vh - 80px - 100px);
+}
+
+.date-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    position: relative;
+    padding-right: 20px;
+}
+
+.page-title:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 25px;
+    background: var(--accent);
+    border-radius: 5px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.date-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 20px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.date-icon {
+    color: var(--accent);
+    font-size: 20px;
+}
+
+.date-text {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.filter-buttons {
+    display: flex;
+    margin-bottom: 30px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.filter-btn {
+    padding: 10px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 10px;
+    transition: var(--transition);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: rgba(0, 225, 255, 0.1);
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(0, 225, 255, 0.2);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+/* MATCHES GRID */
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.loader-spinner {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loader-spinner:before,
+.loader-spinner:after {
+    content: '';
+    position: absolute;
+    border: 3px solid transparent;
+    border-radius: 50%;
+}
+
+.loader-spinner:before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top-color: var(--accent);
+    animation: spin 1s linear infinite;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.loader-spinner:after {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-top-color: var(--accent-dark);
+    animation: spin 1.5s linear infinite reverse;
+}
+
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 25px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    position: relative;
+}
+
+.match-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-2);
+    border-color: var(--accent);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.tournament-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.tournament-icon {
+    color: var(--accent);
+    font-size: 16px;
+}
+
+.tournament-name {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.match-status {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    text-align: center;
+    min-width: 80px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.status-live {
+    background: rgba(255, 45, 85, 0.2);
+    color: var(--live-color);
+    animation: pulse 1.5s infinite;
+}
+
+.status-soon {
+    background: rgba(52, 199, 89, 0.2);
+    color: var(--soon-color);
+}
+
+.status-scheduled {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.status-ended {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+}
+
+.match-teams {
+    padding: 25px 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    position: relative;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 1;
+}
+
+.team-logo {
+    width: 70px;
+    height: 70px;
+    padding: 8px;
+    border-radius: 15px;
+    background: var(--secondary-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-card:hover .team-logo {
+    transform: scale(1.05);
+    border-color: var(--accent);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.team-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.team-name {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 1;
+}
+
+.vs-label {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    position: relative;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.vs-label:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 225, 255, 0.1);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.match-time {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    direction: ltr;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.timezone-note {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.match-countdown {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: center;
+    min-height: 20px;
+    direction: ltr;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-footer {
+    padding: 15px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.channel-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.channel-icon {
+    color: var(--accent);
+    font-size: 16px;
+}
+
+.channel-name {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.watch-btn {
+    background: linear-gradient(to right, var(--accent), var(--accent-dark));
+    color: var(--primary-bg);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-card.live-match .watch-btn {
+    background: linear-gradient(to right, var(--live-color), #ff0f3f);
+}
+
+.watch-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 225, 255, 0.3);
+}
+
+.match-card.live-match .watch-btn:hover {
+    box-shadow: 0 0 15px rgba(255, 45, 85, 0.3);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 23, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: var(--transition);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.match-card:hover .match-overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.overlay-button {
+    background: linear-gradient(to right, var(--accent), var(--accent-dark));
+    color: var(--primary-bg);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: scale(0.9);
+}
+
+.match-card:hover .overlay-button {
+    transform: scale(1);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.match-card.live-match .overlay-button {
+    background: linear-gradient(to right, var(--live-color), #ff0f3f);
+}
+
+.overlay-button:hover {
+    box-shadow: 0 0 20px rgba(0, 225, 255, 0.4);
+    transform: scale(1.05) !important;
+}
+
+.match-card.live-match .overlay-button:hover {
+    box-shadow: 0 0 20px rgba(255, 45, 85, 0.4);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.no-matches {
+    grid-column: 1 / -1;
+    background: var(--card-bg);
+    padding: 50px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+}
+
+.no-matches-icon {
+    font-size: 50px;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.no-matches-title {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.no-matches-text {
+    color: var(--text-secondary);
+}
+
+/* FOOTER */
+footer {
+    background: var(--secondary-bg);
+    padding: 40px 0 20px;
+    border-top: 1px solid var(--border);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.footer-logo-icon {
+    font-size: 22px;
+    color: var(--accent);
+}
+
+.footer-logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.footer-logo-text span {
+    color: var(--accent);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.footer-about {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.footer-heading {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    position: relative;
+    padding-right: 15px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.footer-heading:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 3px;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.footer-links a:hover {
+    color: var(--accent);
+    transform: translateX(-5px);
+}
+
+.footer-links i {
+    font-size: 12px;
+}
+
+.social-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.social-link {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--card-bg);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    font-size: 16px;
+}
+
+.social-link:hover {
+    background: var(--accent);
+    color: var(--primary-bg);
+    transform: translateY(-3px);
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+.copyright {
+    text-align: center;
+    padding: 20px 0 0;
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.copyright a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+/* ANIMATIONS */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px var(--accent-glow);
+    }
+
+    50% {
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    100% {
+        box-shadow: 0 0 5px var(--accent-glow);
+    }
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 1024px) {
+    .matches-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+@media (max-width: 768px) {
+    .header-content {
+        height: auto;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    nav {
+        position: fixed;
+        top: 80px;
+        right: -100%;
+        width: 80%;
+        height: calc(100vh - 80px);
+        background: var(--secondary-bg);
+        transition: var(--transition);
+        z-index: 99;
+        padding: 20px;
+        border-left: 1px solid var(--border);
+    }
+
+    nav.open {
+        right: 0;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Code by Hash | +66 95 330 2762 | Lead Developer */
+@media (max-width: 576px) {
+    .matches-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .date-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .date-display {
+        width: 100%;
+    }
+
+    .match-teams {
+        padding: 15px 10px;
+    }
+
+    .team-logo {
+        width: 60px;
+        height: 60px;
+    }
+}

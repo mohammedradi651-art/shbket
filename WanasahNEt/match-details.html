@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://joaantv.com">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <title>وناسة نت</title>
+
+
+    <style>
+        #player-container:hover .custom-controls {
+            opacity: 1;
+        }
+
+        .custom-controls button {
+            background: none;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            transition: background 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-logo">
+            <i class="fas fa-satellite-dish loading-icon"></i>
+            <div class="loading-spinner"></div>
+        </div>
+        <div class="loading-text">يتم الآن توجيهك للمباراة</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
+    </div>
+    <div id="sting-web">
+        <div id="myPlayer"></div>
+    </div>
+
+    <script type="module" src="../js/match-details.js"></script>
+</body>
+
+</html>

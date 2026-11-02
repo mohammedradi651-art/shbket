@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أهم مباريات اليوم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-logo">
+            <i class="fas fa-satellite-dish loading-icon"></i>
+            <div class="loading-spinner"></div>
+        </div>
+        <div class="loading-text">جاري تحميل البث المباشر</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                    <div class="site-logo">
+                        <i class="fas fa-satellite-dish logo-icon"></i>
+                        <h1 class="logo-text">وناسة.<span>نت</span></h1>
+                    </div>
+             
+
+                <button class="nav-toggle" id="nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#" class="active"><i class="fas fa-futbol"></i> المباريات</a></li>
+                        <!-- <li><a href="#"><i class="fas fa-tv"></i> البث المباشر</a></li>
+                        <li><a href="#"><i class="fas fa-trophy"></i> الدوريات</a></li>
+                        <li><a href="#"><i class="fas fa-calendar-alt"></i> الجدول</a></li>
+                        <li><a href="#"><i class="fas fa-newspaper"></i> الأخبار</a></li> -->
+                    </ul>
+                </nav>
+
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="date-header">
+                <div>
+                    <h1 class="page-title">مباريات اليوم</h1>
+                    <p class="subtitle">تابع جميع مباريات اليوم مباشرة وبجودة عالية</p>
+                </div>
+
+                <div class="date-display">
+                    <i class="fas fa-calendar-day date-icon"></i>
+                    <span class="date-text" id="today-date"></span>
+                </div>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active">جميع المباريات</button>
+                <!-- <button class="filter-btn">الدوري الإنجليزي</button>
+                <button class="filter-btn">دوري أبطال أوروبا</button>
+                <button class="filter-btn">الدوري الإسباني</button>
+                <button class="filter-btn">الدوري السعودي</button> -->
+            </div>
+
+            <div class="loader" id="matches-loader">
+                <div class="loader-spinner"></div>
+            </div>
+
+            <div class="matches-grid" id="matches-container" style="display: none;">
+                <!-- Matches will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <i class="fas fa-satellite-dish footer-logo-icon"></i>
+                        <div class="footer-logo-text">Wanasah. <span>Tv</span></div>
+                    </div>
+                    <p class="footer-about">خدمة البث المباشر لاصحاب الشبكات حيث يمكن لمستخدمي شبكتك متابعة المباريات بجودة عالية وبدون تقطيع، للإشتراك في الخدمة تواصل معنا من خلال معلومات الإتصال في الأسفل</p>
+                    <div class="social-links">
+                        <a href="https://x.com/JoaanTV" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <!-- <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a> -->
+                        <a href="https://www.instagram.com/joaantv" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <!-- <a href="#" class="social-link"><i class="fab fa-youtube"></i></a> -->
+                        <a href="https://t.me/joaan_live" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- 
+                <div class="footer-col">
+                    <h3 class="footer-heading">روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الصفحة الرئيسية</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> المباريات المباشرة</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> جدول المباريات</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> نتائج المباريات</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الأخبار الرياضية</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3 class="footer-heading">البطولات</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> دوري أبطال أوروبا</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الدوري الإنجليزي</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الدوري الإسباني</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الدوري الإيطالي</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الدوري السعودي</a></li>
+                    </ul>
+                </div> -->
+
+                <div class="footer-col">
+                    <h3 class="footer-heading">تواصل معنا</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="mailto:support@joaantv.com">
+                                <i class="fas fa-envelope"></i>
+                                support@joaantv.com
+                            </a>
+                        </li>
+                        <li >
+                            <a href="https://wa.me/967770905678?text=مرحبا">
+                                <i class="fas fa-phone-alt"></i>
+                                <div style="direction: ltr; "> +967 770 905 678</div>
+
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/967770905678?text=مرحبا">
+                                <i class="fas fa-headset"></i>
+                                الدعم الفني
+                            </a>
+                        </li>
+                        <!-- <li><a href="#"><i class="fas fa-question-circle"></i> الأسئلة الشائعة</a></li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright" style="direction: ltr;">
+                &copy; 2025 JoaanTv - جميع الحقوق محفوظة
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="js/main.js"></script>
+
+</body>
+
+</html>
