@@ -1,6 +1,6 @@
 import type { Customer, MikroTikDevice, Network, Package, Reseller, SessionUser, Transaction, Voucher } from '../../shared/types.js';
 import { config } from './config.js';
-import { seedInitialData, store, type StoredUser } from './store.js';
+import { seedInitialData, store, persistStore, type StoredUser } from './store.js';
 
 export type UserRecord = SessionUser & { passwordHash: string };
 export type OwnerInput = { name: string; phone: string; passwordHash: string; networkName: string; region: string };
@@ -90,6 +90,7 @@ export class MemoryRepository implements Repository {
     store.users.set(userId, stored);
     store.networks.set(networkId, network);
     seedInitialData(networkId);
+    persistStore();
     return { user, network };
   }
 
@@ -153,6 +154,7 @@ export class MemoryRepository implements Repository {
     if (!existing) return undefined;
     const updated = { ...existing, status };
     store.mikrotiks.set(id, updated);
+    persistStore();
     return updated;
   }
 
@@ -165,11 +167,14 @@ export class MemoryRepository implements Repository {
     const id = `pkg_${Date.now()}`;
     const pkg: Package = { id, ...input, activeCardsCount: 0, createdAt: new Date().toISOString() };
     store.packages.set(id, pkg);
+    persistStore();
     return pkg;
   }
 
   async deletePackage(id: string): Promise<boolean> {
-    return store.packages.delete(id);
+    const deleted = store.packages.delete(id);
+    if (deleted) persistStore();
+    return deleted;
   }
 
   async listVouchers(networkId: string, filter?: { packageId?: string; status?: string }): Promise<Voucher[]> {
@@ -193,6 +198,7 @@ export class MemoryRepository implements Repository {
         store.packages.set(pkg.id, pkg);
       }
     }
+    persistStore();
     return created;
   }
 
@@ -205,6 +211,7 @@ export class MemoryRepository implements Repository {
     const id = `cust_${Date.now()}`;
     const customer: Customer = { id, ...input, createdAt: new Date().toISOString() };
     store.customers.set(id, customer);
+    persistStore();
     return customer;
   }
 
@@ -213,6 +220,7 @@ export class MemoryRepository implements Repository {
     if (!existing) return undefined;
     const updated = { ...existing, ...input };
     store.customers.set(id, updated);
+    persistStore();
     return updated;
   }
 
@@ -225,6 +233,7 @@ export class MemoryRepository implements Repository {
     const id = `res_${Date.now()}`;
     const reseller: Reseller = { id, ...input, createdAt: new Date().toISOString() };
     store.resellers.set(id, reseller);
+    persistStore();
     return reseller;
   }
 
@@ -245,6 +254,7 @@ export class MemoryRepository implements Repository {
       createdAt: new Date().toISOString()
     };
     store.transactions.set(txId, tx);
+    persistStore();
     return reseller;
   }
 
@@ -259,6 +269,7 @@ export class MemoryRepository implements Repository {
     const id = `tx_${Date.now()}`;
     const tx: Transaction = { id, ...input, createdAt: new Date().toISOString() };
     store.transactions.set(id, tx);
+    persistStore();
     return tx;
   }
 }

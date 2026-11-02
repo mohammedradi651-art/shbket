@@ -35,8 +35,8 @@ export function PrintVouchersModal({
               <div className="printable-card" key={voucher.id}>
                 <div className="printable-card-top">
                   <div className="printable-card-brand">
-                    <span className="brand-mark small">و</span>
-                    <span>{networkName || 'وناسة نت - Wanasah Net'}</span>
+                    <span className="brand-mark small">س</span>
+                    <span>{networkName || 'ستار ميديا - Star Media'}</span>
                   </div>
                   <span className="printable-card-pkg">{voucher.packageName}</span>
                 </div>

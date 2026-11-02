@@ -34,7 +34,7 @@ router.post('/hotspot/customer/request-otp', async (request, response, next) => 
     try {
         const parsed = customerOtpRequestSchema.safeParse(request.body);
         if (!parsed.success) return response.status(400).json({ error: 'VALIDATION_ERROR', message: parsed.error.issues[0]?.message ?? 'رقم الجوال غير صالح.' });
-        const networkName = parsed.data.network || 'وناسة نت';
+        const networkName = parsed.data.network || 'شبكة ستار ميديا';
         const result = await createChallenge({ name: 'مشترك', phone: parsed.data.phone, networkName, region: 'حضرموت' }, 'login');
         return response.json({ data: result });
     } catch (error) {
@@ -50,8 +50,8 @@ router.post('/hotspot/customer/verify-otp', async (request, response, next) => {
         const challenge = await verifyChallenge(parsed.data.challengeId, parsed.data.code);
 
         // Save real customer in database with initial 0 balance
-        const network = await repository.findNetwork('شبكة وناسة نت') || (await repository.getNetwork('net_wanasah_default'));
-        const networkId = network?.id ?? 'net_wanasah_default';
+        const network = await repository.findNetwork('شبكة ستار ميديا') || (await repository.getNetwork('net_starmedia_default'));
+        const networkId = network?.id ?? 'net_starmedia_default';
         const existingCustomers = await repository.listCustomers(networkId);
         let customer = existingCustomers.find((c) => c.phone === challenge.phone);
 

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>حالة الاتصال | ستار ميديا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    body {
+      background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0a192f 40%, #030712 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 24px;
+      padding: 24px 20px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .header { text-align: center; }
+    .header h2 { font-size: 22px; font-weight: 900; color: #38bdf8; }
+    .user-pill {
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid #2563eb;
+      color: #93c5fd;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 6px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat-box {
+      background: rgba(2, 6, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label { font-size: 11px; color: #94a3b8; font-weight: 600; }
+    .stat-value { font-size: 15px; font-weight: 800; color: #38bdf8; margin-top: 4px; }
+    .btn-logout {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h2>ستار ميديا للاتصالات</h2>
+      <div class="user-pill">المستخدم: $(username)</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">عنوان الـ IP</div>
+        <div class="stat-value" dir="ltr">$(ip)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">مدة الاتصال</div>
+        <div class="stat-value">$(uptime)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">التحميل (Download)</div>
+        <div class="stat-value">$(bytes-out-nice)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">الرفع (Upload)</div>
+        <div class="stat-value">$(bytes-in-nice)</div>
+      </div>
+      $(if remain-bytes-total)
+      <div class="stat-box" style="grid-column: span 2;">
+        <div class="stat-label">الرصيد المتبقي</div>
+        <div class="stat-value" style="color: #34d399;">$(remain-bytes-total-nice)</div>
+      </div>
+      $(endif)
+      $(if session-time-left)
+      <div class="stat-box" style="grid-column: span 2;">
+        <div class="stat-label">الوقت المتبقي</div>
+        <div class="stat-value">$(session-time-left)</div>
+      </div>
+      $(endif)
+    </div>
+
+    <form action="$(link-logout)" name="logout" method="post">
+      <input type="hidden" name="erase-cookie" value="on">
+      <button type="submit" class="btn-logout">
+        <span>🚪</span>
+        <span>تسجيل الخروج وقطع الاتصال</span>
+      </button>
+    </form>
+  </div>
+</body>
+</html>

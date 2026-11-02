@@ -80,7 +80,7 @@ export function CustomersView({ network }: { network: Network | null }) {
         <div>
           <span className="eyebrow">مستخدمو الشبكة ونقاط الهوت سبوت</span>
           <h1>إدارة العملاء والمشتركين</h1>
-          <p>متابعة استهلاك البيانات لأجهزة المشتركين على شبكة {network?.name ?? 'وناسة نت'}، وحالة الاتصال، وتجديد الحسابات.</p>
+          <p>متابعة استهلاك البيانات لأجهزة المشتركين على شبكة {network?.name ?? 'ستار ميديا'}، وحالة الاتصال، وتجديد الحسابات.</p>
         </div>
         <button className="button primary" onClick={() => setShowAddModal(true)}>
           <Plus size={16} /> إضافة مشترك جديد
