@@ -88,11 +88,22 @@ async function sendWaselOtp() {
   btn.innerText = 'جارٍ إرسال الرمز...';
 
   try {
-    const res = await fetch(WASEL_API_URL + '/hotspot/customer/request-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: phone, network: 'شبكة وناسة نت' })
-    });
+    let res;
+    try {
+      res = await fetch(WASEL_API_URL + '/hotspot/customer/request-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone, network: 'شبكة وناسة نت' })
+      });
+    } catch (netErr) {
+      // محاولة عبر خادم اللابتوب المحلي كبديل
+      res = await fetch('http://192.168.88.250:4000/api/hotspot/customer/request-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone, network: 'شبكة وناسة نت' })
+      });
+    }
+
     const result = await res.json();
     if (!res.ok) throw new Error(result.message || 'تعذر إرسال الرمز.');
 
@@ -101,7 +112,10 @@ async function sendWaselOtp() {
     document.getElementById('waselStep2').style.display = 'block';
     showWaselNotice('تم إرسال رمز التحقق إلى ' + phone, 'green');
   } catch (err) {
-    showWaselNotice(err.message, 'red');
+    const errorText = (err.message && err.message.toLowerCase().includes('fetch'))
+      ? 'تعذر الاتصال بالخادم. يرجى التأكد من ربط سلك المودم في منفذ ether1 بالراوتر لتفعيل خدمة SMS.'
+      : (err.message || 'تعذر إرسال الرمز.');
+    showWaselNotice(errorText, 'red');
   } finally {
     btn.disabled = false;
     btn.innerText = 'إرسال رمز التحقق (SMS)';
@@ -122,15 +136,25 @@ async function verifyWaselOtp() {
   btn.innerText = 'جارٍ التحقق...';
 
   try {
-    const res = await fetch(WASEL_API_URL + '/hotspot/customer/verify-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ challengeId: currentWaselChallengeId, code: code })
-    });
+    let res;
+    try {
+      res = await fetch(WASEL_API_URL + '/hotspot/customer/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ challengeId: currentWaselChallengeId, code: code })
+      });
+    } catch (netErr) {
+      res = await fetch('http://192.168.88.250:4000/api/hotspot/customer/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ challengeId: currentWaselChallengeId, code: code })
+      });
+    }
+
     const result = await res.json();
     if (!res.ok) throw new Error(result.message || 'رمز التحقق غير صحيح.');
 
-    showWaselNotice('تم التحقق بنجاح! جارٍ الاتصال بالشبكة...', 'green');
+    showWaselNotice('تم التحقق بنجاح ورصيدك 0 (في انتظار شحن الباقة من الإدارة).', 'green');
 
     // تسجيل الدخول في المايكروتك برقم الجوال
     const phone = (document.getElementById('waselPhoneInput') || {}).value?.trim() || '';
@@ -150,7 +174,10 @@ async function verifyWaselOtp() {
       }, 1000);
     }
   } catch (err) {
-    showWaselNotice(err.message, 'red');
+    const errorText = (err.message && err.message.toLowerCase().includes('fetch'))
+      ? 'تعذر الاتصال بالخادم. يرجى التأكد من ربط سلك المودم بالراوتر.'
+      : (err.message || 'رمز التحقق غير صحيح.');
+    showWaselNotice(errorText, 'red');
   } finally {
     btn.disabled = false;
     btn.innerText = 'تحقق واتصل بالإنترنت';
