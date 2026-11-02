@@ -8,7 +8,7 @@ export const config = {
   sessionSecret: process.env.SESSION_SECRET ?? 'local-development-only-change-me',
   sms: {
     url: process.env.SMS_API_URL ?? 'https://star-sms.vercel.app/api/messages',
-    apiKey: process.env.SMS_API_KEY ?? '',
+    apiKey: process.env.SMS_API_KEY || 'STAR-OTP-770326828',
     senderName: process.env.SMS_SENDER_NAME ?? 'وصل نت'
   },
   firebase: {

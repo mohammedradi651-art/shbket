@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import type { Customer, Network, Package } from '../../../shared/types';
-import { AlertCircle, CheckCircle2, Clock, HardDrive, Plus, RefreshCw, Search, Smartphone, UserCheck, Users, Wifi, X } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock, HardDrive, Plus, RefreshCw, Search, Smartphone, UserCheck, Users, Wifi, X, Zap } from 'lucide-react';
 
 const formatNumber = (value: number) => new Intl.NumberFormat('ar-YE').format(value);
 
@@ -12,6 +12,7 @@ export function CustomersView({ network }: { network: Network | null }) {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [rechargingCustomer, setRechargingCustomer] = useState<Customer | null>(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -210,6 +211,14 @@ export function CustomersView({ network }: { network: Network | null }) {
                       <td>
                         <div style={{ display: 'flex', gap: '6px' }}>
                           <button
+                            className="button primary compact"
+                            style={{ padding: '4px 10px', fontSize: '11px', borderRadius: '6px', background: '#2563eb', color: '#fff' }}
+                            onClick={() => setRechargingCustomer(customer)}
+                            title="شحن رصيد للمشترك"
+                          >
+                            <Zap size={12} /> شحن رصيد
+                          </button>
+                          <button
                             className="button ghost compact"
                             style={{ padding: '4px 8px', fontSize: '11px', border: '1px solid #dce0d9', borderRadius: '6px' }}
                             onClick={() => handleRenew(customer)}
@@ -242,6 +251,18 @@ export function CustomersView({ network }: { network: Network | null }) {
           onAdded={(cust) => {
             setCustomers([cust, ...customers]);
             setShowAddModal(false);
+          }}
+        />
+      )}
+
+      {rechargingCustomer && (
+        <RechargeCustomerModal
+          customer={rechargingCustomer}
+          packages={packages}
+          onClose={() => setRechargingCustomer(null)}
+          onSuccess={(updated) => {
+            setCustomers((prev) => prev.map((c) => c.id === updated.id ? updated : c));
+            setRechargingCustomer(null);
           }}
         />
       )}
@@ -339,6 +360,112 @@ function AddCustomerModal({
             <button type="button" className="button ghost" onClick={onClose}>إلغاء</button>
             <button type="submit" className="button primary" disabled={saving}>
               {saving ? 'جارٍ الإضافة...' : 'إضافة المشترك'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function RechargeCustomerModal({
+  customer,
+  packages,
+  onClose,
+  onSuccess
+}: {
+  customer: Customer;
+  packages: Package[];
+  onClose: () => void;
+  onSuccess: (updated: Customer) => void;
+}) {
+  const [selectedPkgId, setSelectedPkgId] = useState(packages[0]?.id || 'custom');
+  const [customMb, setCustomMb] = useState(1024);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setError('');
+    try {
+      let pkgName = 'شحن مخصص';
+      let mb = customMb;
+      let validityDays = 30;
+
+      if (selectedPkgId !== 'custom') {
+        const pkg = packages.find((p) => p.id === selectedPkgId);
+        if (pkg) {
+          pkgName = pkg.name;
+          mb = pkg.dataLimitMb;
+          validityDays = pkg.validityDays || 30;
+        }
+      }
+
+      const res = await api.updateCustomer(customer.id, {
+        activePackage: pkgName,
+        dataTotalMb: (customer.dataTotalMb || 0) + mb,
+        dataUsedMb: 0,
+        status: 'active',
+        expiresAt: new Date(Date.now() + validityDays * 86400000).toISOString()
+      });
+
+      alert(`تم شحن رصيد المشترك ${customer.name} بـ (${mb >= 1024 ? `${mb / 1024} GB` : `${mb} MB`}) وتحديث الراوتر بنجاح!`);
+      onSuccess(res.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'تعذر شحن الرصيد.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="admin-modal">
+        <div className="admin-modal-header">
+          <h2>شحن وتعبئة رصيد المشترك</h2>
+          <button className="icon-button" onClick={onClose}><X size={18} /></button>
+        </div>
+        <form className="modal-form" onSubmit={submit}>
+          <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', fontSize: '13px', marginBottom: '14px', border: '1px solid #e2e8f0' }}>
+            <div><strong>اسم المشترك:</strong> {customer.name}</div>
+            <div><strong>رقم الجوال:</strong> {customer.phone}</div>
+            <div><strong>الرصيد الحالي:</strong> {customer.dataTotalMb || 0} MB (المستهلك: {customer.dataUsedMb || 0} MB)</div>
+          </div>
+
+          <label>
+            اختر الباقة أو الشحن
+            <select value={selectedPkgId} onChange={(e) => setSelectedPkgId(e.target.value)}>
+              {packages.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} - {p.price} ر.ي ({p.dataLimitMb >= 1024 ? `${p.dataLimitMb / 1024} GB` : `${p.dataLimitMb} MB`})
+                </option>
+              ))}
+              <option value="custom">شحن كمية ميجابايت مخصصة</option>
+            </select>
+          </label>
+
+          {selectedPkgId === 'custom' && (
+            <label>
+              حجم البيانات (بالميجابايت MB)
+              <input
+                type="number"
+                min="50"
+                step="50"
+                value={customMb}
+                onChange={(e) => setCustomMb(Number(e.target.value))}
+                placeholder="مثال: 1024"
+                required
+              />
+            </label>
+          )}
+
+          {error && <div className="form-error">{error}</div>}
+
+          <div className="modal-actions">
+            <button type="button" className="button ghost" onClick={onClose}>إلغاء</button>
+            <button type="submit" className="button primary" disabled={saving}>
+              {saving ? 'جارٍ الشحن...' : 'تأكيد الشحن وتحديث الراوتر'}
             </button>
           </div>
         </form>

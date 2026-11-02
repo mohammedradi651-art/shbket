@@ -49,22 +49,41 @@ router.post('/hotspot/customer/verify-otp', async (request, response, next) => {
         if (!parsed.success) return response.status(400).json({ error: 'VALIDATION_ERROR', message: 'رمز التحقق يجب أن يتكون من 4 أرقام.' });
         const challenge = await verifyChallenge(parsed.data.challengeId, parsed.data.code);
 
-        // Auto-provision user in MikroTik if reachable locally
+        // Save real customer in database with initial 0 balance
+        const network = await repository.findNetwork('شبكة وناسة نت') || (await repository.getNetwork('net_wanasah_default'));
+        const networkId = network?.id ?? 'net_wanasah_default';
+        const existingCustomers = await repository.listCustomers(networkId);
+        let customer = existingCustomers.find((c) => c.phone === challenge.phone);
+
+        if (!customer) {
+            customer = await repository.createCustomer({
+                networkId,
+                name: `مشترك ${challenge.phone}`,
+                phone: challenge.phone,
+                activePackage: 'بدون باقة (الرصيد 0)',
+                dataTotalMb: 0,
+                dataUsedMb: 0,
+                uptimeUsedMinutes: 0,
+                status: 'active'
+            });
+        }
+
+        // Auto-provision user in MikroTik with 0 balance (1 byte so internet is blocked until charged)
         addHotspotUsersToMikroTik('192.168.88.1', 8728, 'admin', '770326828', [
             {
                 name: challenge.phone,
                 password: '',
-                limitBytesTotal: 50 * 1024 * 1024,
-                limitUptime: '1h',
-                comment: 'WaselNet Phone User'
+                limitBytesTotal: 1,
+                limitUptime: '1s',
+                comment: 'WaselNet Phone - Balance 0'
             }
         ]).catch(() => undefined);
 
-        // Queue command for remote MikroTik cloud sync (polled by router scheduler)
-        const syncCmd = `:do { /ip hotspot user remove [find name="${challenge.phone}"] } on-error={}; /ip hotspot user add name="${challenge.phone}" password="" limit-bytes-total=52428800 limit-uptime=1h comment="WaselNet Phone"`;
+        // Queue command for remote MikroTik cloud sync
+        const syncCmd = `:do { /ip hotspot user remove [find name="${challenge.phone}"] } on-error={}; /ip hotspot user add name="${challenge.phone}" password="" limit-bytes-total=1 limit-uptime=1s comment="WaselNet Phone - Balance 0"`;
         await queueMikroTikSyncCommand(syncCmd);
 
-        return response.json({ data: { success: true, phone: challenge.phone, message: 'تم التحقق بنجاح.' } });
+        return response.json({ data: { success: true, phone: challenge.phone, customer, message: 'تم التحقق بنجاح ورصيدك 0 في انتظار الشحن.' } });
     } catch (error) {
         if (error instanceof Error) {
             const messages: Record<string, string> = { OTP_INVALID: 'رمز التحقق غير صحيح.', OTP_EXPIRED: 'انتهت صلاحية رمز التحقق.', OTP_LOCKED: 'تم إيقاف المحاولة مؤقتًا بسبب تكرار الرموز الخاطئة.' };
@@ -415,6 +434,23 @@ router.patch('/customers/:id', requireAuth, async (request: AuthenticatedRequest
   try {
     const updated = await repository.updateCustomer(String(request.params.id), request.body);
     if (!updated) return response.status(404).json({ error: 'NOT_FOUND', message: 'المشترك غير موجود.' });
+
+    // Sync new data limit to MikroTik if updated
+    if (request.body.dataTotalMb !== undefined || request.body.activePackage) {
+      const bytes = (updated.dataTotalMb || 0) * 1024 * 1024;
+      const uptime = updated.uptimeUsedMinutes ? `${updated.uptimeUsedMinutes}m` : '0';
+      const syncCmd = `:do { /ip hotspot user set [find name="${updated.phone}"] limit-bytes-total=${bytes} comment="WaselNet - ${updated.activePackage || 'Charged'}" } on-error={};`;
+      await queueMikroTikSyncCommand(syncCmd);
+      addHotspotUsersToMikroTik('192.168.88.1', 8728, 'admin', '770326828', [
+        {
+          name: updated.phone,
+          password: '',
+          limitBytesTotal: bytes,
+          comment: `WaselNet - ${updated.activePackage || 'Charged'}`
+        }
+      ]).catch(() => undefined);
+    }
+
     return response.json({ data: updated });
   } catch (error) { return next(error); }
 });
